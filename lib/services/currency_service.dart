@@ -5,6 +5,7 @@ import 'package:economy_summary/models/currency_model.dart';
 class CurrencyService {
   final String apiUrl = 'http://localhost:3000/exchange?';
 
+
   Future<List<Currency>> fetchExchangeRates() async {
     final response = await http.get(Uri.parse(apiUrl));
     if (response.statusCode == 200) {

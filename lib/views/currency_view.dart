@@ -69,7 +69,8 @@ class _CurrencyInfoState extends State<CurrencyInfo> {
           final currency = viewModel.currencies[index];
           return ListTile(
             title: Text(currency.unit),
-            subtitle: Text('${currency.rate} 원'),
+            subtitle: Text(currency.name),
+            trailing: Text('${currency.rate} 원'),
           );
         },
       ),

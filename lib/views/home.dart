@@ -1,3 +1,4 @@
+import 'package:economy_summary/viewmodels/index_viewmodel.dart';
 import 'package:economy_summary/views/currency_view.dart';
 import 'package:economy_summary/views/news_view.dart';
 import 'package:economy_summary/views/stock_view.dart';
@@ -6,6 +7,8 @@ import 'package:economy_summary/views/crypto_view.dart';
 import 'package:economy_summary/views/home_view.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
+import 'package:marquee/marquee.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -88,18 +91,41 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            sectionBox(_homeKey, width, Colors.orangeAccent, '여기에 홈이 들어갑니다.'),
-            sectionBox(_coinKey, width, Colors.blueGrey, '여기에 코인차트가 들어갑니다.'),
-            sectionBox(_stockKey, width, Colors.lightBlueAccent, '여기에 주식차트가 들어갑니다.'),
-            sectionBox(_newsKey, width, Colors.greenAccent, '여기에 뉴스가 들어갑니다.'),
-            sectionBox(_currencyKey, width, Colors.purpleAccent, '여기에 환율이 들어갑니다.'),
+            Container(
+              width: double.infinity,
+              height: 50,
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const HeadLineCarousel(), // HeadLineCarousel 위젯을 여기에 추가
+            ),
+            Container(
+              width: double.infinity,
+              height: 50,
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.symmetric(
+                  horizontal: BorderSide(color: Colors.grey, width: 1.0),
+                ),
+              ),
+              child: const ScrollingHeadline(), // ScrollingHeadline 위젯을 여기에 추가
+            ),
+            sectionBox(_homeKey, width,  '여기에 홈이 들어갑니다.'),
+            sectionBox(_coinKey, width,  '여기에 코인차트가 들어갑니다.'),
+            sectionBox(_stockKey, width, '여기에 주식차트가 들어갑니다.'),
+            sectionBox(_newsKey, width,  '여기에 뉴스가 들어갑니다.'),
+            sectionBox(_currencyKey, width, '여기에 환율이 들어갑니다.'),
           ],
         ),
       ),
     );
   }
 
-  Widget sectionBox(GlobalKey key, double width, Color color, String text) {
+  Widget sectionBox(GlobalKey key, double width, String text) {
     return Container(
       key: key,
       width: double.infinity ,
@@ -107,7 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color,
+
+        border: Border.all(color: Colors.grey, width: 1.0),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
@@ -173,6 +200,111 @@ class _LiveClockState extends State<LiveClock> {
     return Text(
       '$_time',
       style: const TextStyle(fontSize: 18),
+    );
+  }
+}
+
+
+
+class ScrollingHeadline extends StatefulWidget {
+  const ScrollingHeadline({super.key});
+
+  @override
+  State<ScrollingHeadline> createState() => _ScrollingHeadlineState();
+}
+
+class _ScrollingHeadlineState extends State<ScrollingHeadline> {
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => context.read<IndexViewModel>().fetchIndex());
+    //환율정보 초기화 (viewmodel 에서 fetchRates 호출)
+  }
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<IndexViewModel>();
+    return SizedBox(
+      height: 50,
+      child: viewModel.isLoading
+      ? Center(child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.0,))
+      : Marquee(
+        text: '나스닥 : ${viewModel.indexs[0].price} ${viewModel.indexs[0].changePercent}%         '
+            '다우존스 : ${viewModel.indexs[1].price} ${viewModel.indexs[1].changePercent}%         '
+            'S&P 500 : ${viewModel.indexs[2].price} ${viewModel.indexs[2].changePercent}%         '
+            '코스피 : ${viewModel.indexs[3].price} ${viewModel.indexs[3].changePercent}%         '
+            '코스닥 : ${viewModel.indexs[4].price} ${viewModel.indexs[4].changePercent}%         ',
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+        scrollAxis: Axis.horizontal,
+        velocity: 50.0,
+        pauseAfterRound: Duration(seconds: 1),
+        startPadding: 10.0,
+        decelerationDuration: Duration(milliseconds: 500),
+        decelerationCurve: Curves.easeOut,
+      ),
+    );
+  }
+}
+
+
+class HeadLineCarousel extends StatefulWidget {
+  const HeadLineCarousel({super.key});
+
+  @override
+  State<HeadLineCarousel> createState() => _HeadLineCarouselState();
+}
+
+class _HeadLineCarouselState extends State<HeadLineCarousel> {
+
+  final PageController _controller = PageController();
+  final List<String> _headlines = [
+    'Headline 1: Breaking News!',
+    'Headline 2: Market Update',
+    'Headline 3: Weather Alert',
+    'Headline 4: Sports Highlights',
+    'Headline 5: Technology Advances',
+  ];
+  int _currentIndex = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_currentIndex < _headlines.length - 1) {
+        _currentIndex++;
+      } else {
+        _currentIndex = 0;
+      }
+      _controller.animateToPage(
+        _currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: _controller,
+      physics: const NeverScrollableScrollPhysics(), // 자동만, 스와이프 금지
+      itemCount: _headlines.length,
+      itemBuilder: (context, index) {
+        return Center(
+          child: Text(
+            _headlines[index],
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        );
+      },
     );
   }
 }
