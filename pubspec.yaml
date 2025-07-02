@@ -40,6 +40,7 @@ dependencies:
   provider: ^6.1.5
   marquee: ^2.2.3
   fl_chart: ^1.0.0
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

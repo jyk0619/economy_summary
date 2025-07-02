@@ -12,7 +12,7 @@ class NewsView extends StatelessWidget {
         children: [
           Text(
             '뉴스 정보',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           SizedBox(height: 20),
           ElevatedButton(

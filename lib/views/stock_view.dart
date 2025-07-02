@@ -13,7 +13,7 @@ class StockView extends StatelessWidget {
         children: [
           Text(
             '주식 정보',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           SizedBox(height: 20),
           ElevatedButton(

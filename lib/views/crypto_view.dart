@@ -17,7 +17,7 @@ class _CryptoViewState extends State<CryptoView> {
         children: [
           Text(
             '암호화폐 정보',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           SizedBox(height: 20),
           ElevatedButton(
