@@ -5,8 +5,8 @@ import '../services/stock_service.dart';
 class StockViewModel extends ChangeNotifier {
   final StockService _service = StockService();
 
-  List<Stock> _stocks = [];
-  List<Stock> get stocks => _stocks;
+  List<StockData> _stocks = [];
+  List<StockData> get stocks => _stocks;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -23,7 +23,7 @@ class StockViewModel extends ChangeNotifier {
       _stocks = await _service.fetchStock();
     } catch (e) {
       _error = e.toString();
-      print('Error fetching exchange rates: $_error');
+      print('Error fetching stock flutter: $_error');
     } finally {
       _isLoading = false;
       notifyListeners();

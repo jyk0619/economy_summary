@@ -1,6 +1,7 @@
 import 'package:economy_summary/core/theme/app_theme.dart';
 import 'package:economy_summary/viewmodels/currency_viemodel.dart';
 import 'package:economy_summary/viewmodels/index_viewmodel.dart';
+import 'package:economy_summary/viewmodels/stock_viewmodel.dart';
 import 'package:flutter/material.dart';
 import'package:economy_summary/views/home.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => CurrencyViewModel()),
           ChangeNotifierProvider(create: (_) => IndexViewModel()),
           ChangeNotifierProvider(create: (_)=>ThemeProvider()),
+      ChangeNotifierProvider(create: (_) => StockViewModel()),
     ],
       child:const MyApp()
     ),

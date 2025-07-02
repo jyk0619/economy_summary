@@ -19,6 +19,7 @@ class StockView extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               // 여기에 주식 정보 조회 로직을 추가하세요.
+
             },
             child: Text('주식 정보 조회'),
           ),

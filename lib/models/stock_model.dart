@@ -1,41 +1,13 @@
-
-class Stock {
+class StockData {
   final String symbol;
-  final String date;
-  final double open;
-  final double high;
-  final double low;
-  final double close;
-  final int volume;
-  final double change;
-  final double changePercent;
-  final double vwap;
+  final Map<String, dynamic> data; // 혹은 필요한 데이터 구조로 커스터마이징
 
+  StockData({required this.symbol, required this.data});
 
-  Stock({
-    required this.symbol,
-    required this.date,
-    required this.open,
-    required this.high,
-    required this.low,
-    required this.close,
-    required this.volume,
-    required this.change,
-    required this.changePercent,
-    required this.vwap,});
-
-  factory Stock.fromJson(Map<String, dynamic> json) {
-    return Stock(
+  factory StockData.fromJson(Map<String, dynamic> json) {
+    return StockData(
       symbol: json['symbol'],
-      date: json['date'],
-      open: json['open'].toDouble(),
-      high: json['high'].toDouble(),
-      low: json['low'].toDouble(),
-      close: json['close'].toDouble(),
-      volume: json['volume'],
-      change: json['change'].toDouble(),
-      changePercent: json['changePercent'].toDouble(),
-      vwap: json['vwap'].toDouble(),
+      data: json['data'],
     );
   }
 }

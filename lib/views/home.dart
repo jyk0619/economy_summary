@@ -114,24 +114,23 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: const ScrollingHeadline(), // ScrollingHeadline 위젯을 여기에 추가
             ),
-            sectionBox(_homeKey, width,  '여기에 홈이 들어갑니다.'),
-            sectionBox(_coinKey, width,  '여기에 코인차트가 들어갑니다.'),
-            sectionBox(_stockKey, width, '여기에 주식차트가 들어갑니다.'),
-            sectionBox(_newsKey, width,  '여기에 뉴스가 들어갑니다.'),
-            sectionBox(_currencyKey, width, '여기에 환율이 들어갑니다.'),
+            sectionBox(_homeKey, width,),
+            sectionBox(_coinKey, width,),
+            sectionBox(_stockKey, width,),
+            sectionBox(_newsKey, width,),
+            sectionBox(_currencyKey, width,),
           ],
         ),
       ),
     );
   }
 
-  Widget sectionBox(GlobalKey key, double width, String text) {
+  Widget sectionBox(GlobalKey key, double width) {
     return Container(
       key: key,
       width: double.infinity ,
-      height: 500,
       margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
 
         border: Border.all(color: Colors.grey, width: 1.0),
@@ -140,9 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Center(
         child: Column(
           children: [
-            Text(text,
-                style: const TextStyle(fontSize: 18, color: Colors.white)),
-            SizedBox(height: 20),
+
             if (key == _homeKey)
                Home(), // CryptoView 위젯을 여기에 추가
             if (key == _coinKey)
@@ -228,6 +225,8 @@ class _ScrollingHeadlineState extends State<ScrollingHeadline> {
       height: 50,
       child: viewModel.isLoading
       ? Center(child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.0,))
+      : viewModel.indexs.length < 5
+      ? Center(child: Text('데이터를 불러오는 중 입니다'))
       : Marquee(
         text: '나스닥 : ${viewModel.indexs[0].price} ${viewModel.indexs[0].changePercent}%         '
             '다우존스 : ${viewModel.indexs[1].price} ${viewModel.indexs[1].changePercent}%         '
